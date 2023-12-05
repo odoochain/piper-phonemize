@@ -6,9 +6,12 @@ from pybind11.setup_helpers import Pybind11Extension, build_ext
 from setuptools import setup
 
 _DIR = Path(__file__).parent
-_ESPEAK_DIR = _DIR / "espeak-ng" / "build"
-_LIB_DIR = _DIR / "lib" / f"Linux-{platform.machine()}"
-_ONNXRUNTIME_DIR = _LIB_DIR / "onnxruntime"
+_ESPEAK_DIR = _DIR / "espeak-ng" / "my-build" / "install"
+#  _LIB_DIR = _DIR / "lib" / f"Linux-{platform.machine()}"
+#  _ONNXRUNTIME_DIR = _LIB_DIR / "onnxruntime"
+_ONNXRUNTIME_DIR = _DIR / "my-build" / "install"
+print('_ESPEAK_DIR', _ESPEAK_DIR)
+print('_ONNXRUNTIME_DIR', _ONNXRUNTIME_DIR)
 
 __version__ = "1.2.0"
 

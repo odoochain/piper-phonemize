@@ -112,13 +112,15 @@ if(NOT DEFINED ESPEAK_NG_DIR)
         espeak_ng_external
         PREFIX "${CMAKE_CURRENT_BINARY_DIR}/e"
         # URL "https://github.com/rhasspy/espeak-ng/archive/refs/heads/master.zip"
-        URL "https://github.com/csukuangfj/espeak-ng/archive/c58d2a4a88e9a291ca448f046e15c6188cbd3b3a.zip"
-        CMAKE_ARGS -DCMAKE_INSTALL_PREFIX:PATH=${ESPEAK_NG_DIR}
+        URL "https://github.com/csukuangfj/espeak-ng/archive/7251208ee427ef87e94f39d0e99b15d287224ed6.zip"
+        CMAKE_ARGS -DCMAKE_INSTALL_PREFIX:PATH=${CMAKE_INSTALL_PREFIX}
         CMAKE_ARGS -DUSE_ASYNC:BOOL=OFF
         CMAKE_ARGS -DBUILD_SHARED_LIBS:BOOL=${BUILD_SHARED_LIBS}
         CMAKE_ARGS -DUSE_MBROLA:BOOL=OFF
         CMAKE_ARGS -DUSE_LIBSONIC:BOOL=OFF
         CMAKE_ARGS -DUSE_LIBPCAUDIO:BOOL=OFF
+        CMAKE_ARGS -DBUILD_ESPEAK_NG_EXE:BOOL=OFF
+        CMAKE_ARGS -DBUILD_ESPEAK_NG_TESTS:BOOL=OFF
         CMAKE_ARGS -DUSE_KLATT:BOOL=OFF
         CMAKE_ARGS -DUSE_SPEECHPLAYER:BOOL=OFF
         CMAKE_ARGS -DEXTRA_cmn:BOOL=ON
@@ -128,6 +130,8 @@ if(NOT DEFINED ESPEAK_NG_DIR)
     add_dependencies(piper_phonemize espeak_ng_external)
 endif()
 
+message(STATUS "ESPEAK_NG_DIR: ${ESPEAK_NG_DIR}")
+message(STATUS "ONNXRUNTIME_DIR: ${ONNXRUNTIME_DIR}")
 
 # ---- Declare library ----
 
