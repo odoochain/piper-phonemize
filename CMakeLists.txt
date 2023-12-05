@@ -111,7 +111,8 @@ if(NOT DEFINED ESPEAK_NG_DIR)
     ExternalProject_Add(
         espeak_ng_external
         PREFIX "${CMAKE_CURRENT_BINARY_DIR}/e"
-        URL "https://github.com/rhasspy/espeak-ng/archive/refs/heads/master.zip"
+        # URL "https://github.com/rhasspy/espeak-ng/archive/refs/heads/master.zip"
+        URL "https://github.com/csukuangfj/espeak-ng/archive/c58d2a4a88e9a291ca448f046e15c6188cbd3b3a.zip"
         CMAKE_ARGS -DCMAKE_INSTALL_PREFIX:PATH=${ESPEAK_NG_DIR}
         CMAKE_ARGS -DUSE_ASYNC:BOOL=OFF
         CMAKE_ARGS -DBUILD_SHARED_LIBS:BOOL=${BUILD_SHARED_LIBS}

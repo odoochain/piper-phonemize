@@ -1,0 +1,77 @@
+name: build-wheels-linux
+
+on:
+  push:
+    branches:
+      - wheel
+      - sherpa-onnx
+
+    tags:
+      - '*'
+  workflow_dispatch:
+
+concurrency:
+  group: build-wheels-linux-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  build_wheels_linux:
+    name: ${{ matrix.python-version }}
+    runs-on: ${{ matrix.os }}
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [ubuntu-latest]
+        python-version: ["cp37", "cp38", "cp39", "cp310", "cp311", "cp312"]
+
+    steps:
+      - uses: actions/checkout@v4
+
+      # see https://cibuildwheel.readthedocs.io/en/stable/changelog/
+      # for a list of versions
+      - name: Build wheels
+        uses: pypa/cibuildwheel@v2.15.0
+        env:
+          CIBW_BUILD: "${{ matrix.python-version}}-* "
+          CIBW_SKIP: "cp27-* cp35-* cp36-* *-win32 pp* *-musllinux* *-manylinux_i686"
+          CIBW_BUILD_VERBOSITY: 3
+          # CIBW_ENVIRONMENT_LINUX: LD_LIBRARY_PATH='/project/build/bdist.linux-x86_64/wheel/sherpa_onnx/lib'
+
+      - name: Display wheels
+        shell: bash
+        run: |
+          ls -lh ./wheelhouse/
+
+
+      - uses: actions/upload-artifact@v3
+        with:
+          path: ./wheelhouse/*.whl
+
+      - name: Publish to huggingface
+        # if: matrix.python-version == 'cp38'
+        env:
+          HF_TOKEN: ${{ secrets.HF_TOKEN }}
+        uses: nick-fields/retry@v2
+        with:
+          max_attempts: 20
+          timeout_seconds: 200
+          shell: bash
+          command: |
+            git config --global user.email "csukuangfj@gmail.com"
+            git config --global user.name "Fangjun Kuang"
+
+            rm -rf huggingface
+            export GIT_LFS_SKIP_SMUDGE=1
+
+            git clone https://huggingface.co/csukuangfj/piper-phonemize-wheels huggingface
+            cd huggingface
+            git fetch
+            git pull
+            git merge -m "merge remote" --ff origin main
+
+            cp -v ../wheelhouse/*.whl .
+
+            git status
+            git add .
+            git commit -m "add more wheels"
+            git push https://csukuangfj:$HF_TOKEN@huggingface.co/csukuangfj/piper-phonemize-wheels main
