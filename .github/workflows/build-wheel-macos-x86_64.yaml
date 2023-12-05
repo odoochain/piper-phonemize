@@ -1,26 +1,27 @@
-name: build-wheels-linux
+name: build-wheels-macos-x86_64
 
 on:
   push:
     branches:
       - wheel
+      - sherpa-onnx
 
     tags:
       - '*'
   workflow_dispatch:
 
 concurrency:
-  group: build-wheels-linux-${{ github.ref }}
+  group: build-wheels-macos-x86_64-${{ github.ref }}
   cancel-in-progress: true
 
 jobs:
-  build_wheels_linux:
+  build_wheels_macos_x86-64:
     name: ${{ matrix.python-version }}
     runs-on: ${{ matrix.os }}
     strategy:
       fail-fast: false
       matrix:
-        os: [ubuntu-latest]
+        os: [macos-latest]
         python-version: ["cp37", "cp38", "cp39", "cp310", "cp311", "cp312"]
 
     steps:
@@ -32,6 +33,8 @@ jobs:
         uses: pypa/cibuildwheel@v2.15.0
         env:
           CIBW_BEFORE_BUILD: |
+            my_project=/Users/runner/work/piper-phonemize/piper-phonemize
+
             echo "Install espeak-ng"
             git clone https://github.com/csukuangfj/espeak-ng
             cd espeak-ng
@@ -72,10 +75,10 @@ jobs:
             ls -lh
 
             echo "espeak install dir"
-            ls -lh /project/espeak-ng/my-build/install
+            ls -lh $my_project/espeak-ng/my-build/install
 
             cmake \
-              -DESPEAK_NG_DIR=/project/espeak-ng/my-build/install \
+              -DESPEAK_NG_DIR=$my_project/espeak-ng/my-build/install \
               -DCMAKE_INSTALL_PREFIX=./install \
               -DBUILD_PIPER_PHONMIZE_TESTS=OFF \
               -DBUILD_PIPER_PHONMIZE_EXE=OFF \
@@ -84,7 +87,7 @@ jobs:
             make -j
             make install
 
-            cp -a /project/espeak-ng/my-build/install/share/espeak-ng-data ../piper_phonemize/
+            cp -a $my_project/espeak-ng/my-build/install/share/espeak-ng-data ../piper_phonemize/
             cp -a ./install/share/*.ort ../
             pwd
             ls -lh
@@ -104,9 +107,11 @@ jobs:
             ls -lh
 
           CIBW_BUILD: "${{ matrix.python-version}}-* "
-          CIBW_SKIP: "cp27-* cp35-* cp36-* *-win32 pp* *-musllinux* *-manylinux_i686"
+          CIBW_ARCHS: "x86_64"
           CIBW_BUILD_VERBOSITY: 3
-          CIBW_ENVIRONMENT_LINUX: LD_LIBRARY_PATH='/project/my-build/install/lib'
+
+          #  Don't repair macOS wheels
+          CIBW_REPAIR_WHEEL_COMMAND_MACOS: ""
 
       - name: Display wheels
         shell: bash
