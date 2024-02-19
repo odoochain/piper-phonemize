@@ -176,6 +176,10 @@ target_link_libraries(
     onnxruntime
 )
 
+if(NOT WIN32 AND CMAKE_SYSTEM_NAME STREQUAL Linux)
+  target_link_libraries(piper_phonemize -pthread)
+endif()
+
 if(NOT BUILD_SHARED_LIBS)
   target_link_libraries(piper_phonemize ucd)
 endif()
