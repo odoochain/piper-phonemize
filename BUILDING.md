@@ -35,3 +35,13 @@ python -m build -w
 __Debug pyd dependencies with___
 
 https://github.com/lucasg/Dependencies/releases/tag/v1.11.1
+
+## Publish
+
+Prepare token from https://pypi.org/manage/account/
+
+```console
+pip install setuptools wheel twine
+export TWINE_PASSWORD="token"
+twine upload dist/*
+```
