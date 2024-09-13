@@ -41,7 +41,10 @@ setup(
         "piper_phonemize": [
             str(p) for p in (_DIR / "piper_phonemize" / "espeak-ng-data").rglob("*")
         ]
-        + [str(_DIR / "libtashkeel_model.ort")]
+        + [str(_DIR / "libtashkeel_model.ort")],
+        '': [
+            str(p) for p in (_DIR / "piper_phonemize").rglob("*.dll")
+        ] if platform.system() == 'Windows' else []
     },
     include_package_data=True,
     ext_modules=ext_modules,
