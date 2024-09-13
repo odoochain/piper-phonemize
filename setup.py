@@ -6,9 +6,9 @@ from pybind11.setup_helpers import Pybind11Extension, build_ext
 from setuptools import setup
 
 _DIR = Path(__file__).parent
-_ESPEAK_DIR = _DIR / "espeak-ng" / "build"
-_LIB_DIR = _DIR / "lib" / f"Linux-{platform.machine()}"
-_ONNXRUNTIME_DIR = _LIB_DIR / "onnxruntime"
+_LIB_DIR = _DIR / "_install/lib"
+_INCLUDE_DIR = _DIR / '_install/include'
+
 
 __version__ = "1.2.0"
 
@@ -22,8 +22,8 @@ ext_modules = [
             "src/tashkeel.cpp",
         ],
         define_macros=[("VERSION_INFO", __version__)],
-        include_dirs=[str(_ESPEAK_DIR / "include"), str(_ONNXRUNTIME_DIR / "include")],
-        library_dirs=[str(_ESPEAK_DIR / "lib"), str(_ONNXRUNTIME_DIR / "lib")],
+        include_dirs=[str(_INCLUDE_DIR)],
+        library_dirs=[str(_LIB_DIR)],
         libraries=["espeak-ng", "onnxruntime"],
     ),
 ]
@@ -42,9 +42,10 @@ setup(
             str(p) for p in (_DIR / "piper_phonemize" / "espeak-ng-data").rglob("*")
         ]
         + [str(_DIR / "libtashkeel_model.ort")],
-        '': [
-            str(p) for p in (_DIR / "piper_phonemize").rglob("*.dll")
-        ] if platform.system() == 'Windows' else []
+        '': [str(p) for p in (_DIR / "piper_phonemize").rglob("*.dll")]
+        + [str(p) for p in (_DIR / "piper_phonemize").rglob("*.so*")]
+    
+
     },
     include_package_data=True,
     ext_modules=ext_modules,
