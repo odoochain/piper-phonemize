@@ -29,7 +29,7 @@ ext_modules = [
 ]
 
 setup(
-    name="piper_phonemize",
+    name="piper-phonemize-fork",
     version=__version__,
     author="Michael Hansen",
     author_email="mike@rhasspy.org",
