@@ -8,8 +8,14 @@ pip install setuptools pybind11 build
 cmake -B build -DCMAKE_INSTALL_PREFIX=_install
 cmake --build build --config Release
 cmake --install build
+```
+
+_On macOS and Linux_
+
+```console
 export CPPFLAGS="-I${PWD}/_install/include/piper-phonemize -I${PWD}/_install/include -L${PWD}/_install/lib"
 cp -rf ./_install/share/espeak-ng-data ./piper_phonemize/
+python setup.py clean --all
 python -m build -w
 ```
 
@@ -29,6 +35,13 @@ $env:INCLUDE += ";$pwd/_install/include"
 $env:LIB += ";$pwd/_install/lib"
 Copy-Item _install\bin\espeak-ng.dll piper_phonemize\
 Copy-Item _install\lib\onnxruntime.dll piper_phonemize\
+python -m build -w
+```
+
+_On Linux WIP_
+
+```console
+cp -rf _install/lib/*.so* piper_phonemize/
 python -m build -w
 ```
 
