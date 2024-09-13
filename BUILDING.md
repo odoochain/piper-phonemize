@@ -18,5 +18,5 @@ _On macOS__
 ```console
 pip install delocate
 export DYLD_LIBRARY_PATH=$(pwd)/_install/lib
-delocate-wheel -w fixed_wheels -v ./dist/piper_phonemize-*.whl
+delocate-wheel -w fixed_wheels -v ./dist/piper_phonemize*.whl
 ```
