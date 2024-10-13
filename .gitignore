@@ -23,3 +23,5 @@ htmlcov
 
 *.tar.gz
 *.whl
+*.dll
+*.so*

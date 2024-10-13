@@ -5,21 +5,12 @@ from pathlib import Path
 from pybind11.setup_helpers import Pybind11Extension, build_ext
 from setuptools import setup
 
-extra_link_args = []
-
-if platform.system() == 'Darwin':
-    extra_link_args.append('-Wl,-rpath,' + 'piper_phonemize')
-
 _DIR = Path(__file__).parent
-_ESPEAK_DIR = _DIR / "espeak-ng" / "my-build" / "install"
-_ONNXRUNTIME_DIR = _DIR / "my-build" / "install"
+_LIB_DIR = _DIR / "_install/lib"
+_INCLUDE_DIR = _DIR / '_install/include'
 
-import os
-os.system("pwd")
-os.system("ls -lh")
-os.system("ls -lh piper_phonemize")
 
-__version__ = "1.1.0"
+__version__ = "1.2.0"
 
 ext_modules = [
     Pybind11Extension(
@@ -31,29 +22,30 @@ ext_modules = [
             "src/tashkeel.cpp",
         ],
         define_macros=[("VERSION_INFO", __version__)],
-        include_dirs=[str(_ESPEAK_DIR / "include"), str(_ONNXRUNTIME_DIR / "include")],
-        library_dirs=[str(_ESPEAK_DIR / "lib"), str(_ONNXRUNTIME_DIR / "lib")],
+        include_dirs=[str(_INCLUDE_DIR)],
+        library_dirs=[str(_LIB_DIR)],
         libraries=["espeak-ng", "onnxruntime"],
-        extra_link_args = extra_link_args,
     ),
 ]
 
 setup(
-    name="piper_phonemize",
+    name="piper-phonemize-fork",
     version=__version__,
     author="Michael Hansen",
     author_email="mike@rhasspy.org",
     url="https://github.com/rhasspy/piper-phonemize",
-    description="Phonemization library used by Piper text to speech system",
+    description="Phonemization libary used by Piper text to speech system",
     long_description="",
     packages=["piper_phonemize"],
     package_data={
         "piper_phonemize": [
             str(p) for p in (_DIR / "piper_phonemize" / "espeak-ng-data").rglob("*")
         ]
-        + [str(_DIR / "libtashkeel_model.ort")] + [
-            str(p) for p in (_DIR / "piper_phonemize").rglob("*dylib*")
-        ]
+        + [str(_DIR / "libtashkeel_model.ort")],
+        '': [str(p) for p in (_DIR / "piper_phonemize").rglob("*.dll")]
+        + [str(p) for p in (_DIR / "piper_phonemize").rglob("*.so*")]
+    
+
     },
     include_package_data=True,
     ext_modules=ext_modules,
