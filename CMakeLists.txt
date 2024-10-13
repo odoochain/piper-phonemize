@@ -4,7 +4,7 @@ set(CMAKE_VERBOSE_MAKEFILE off)
 
 project(
     piper_phonemize
-    VERSION 1.2.0
+    VERSION 1.1.0
     DESCRIPTION "Phonemization library for Piper text to speech system"
     HOMEPAGE_URL "https://github.com/rhasspy/piper-phonemize"
     LANGUAGES CXX
@@ -50,8 +50,10 @@ if(NOT DEFINED ESPEAK_NG_DIR)
     ExternalProject_Add(
         espeak_ng_external
         PREFIX "${CMAKE_CURRENT_BINARY_DIR}/e"
+		URL "https://github.com/odoochain/espeak-ng/archive/refs/heads/master.zip"
         # URL "https://github.com/rhasspy/espeak-ng/archive/refs/heads/master.zip"
-        URL "https://github.com/csukuangfj/espeak-ng/archive/7251208ee427ef87e94f39d0e99b15d287224ed6.zip"
+        # URL "https://github.com/csukuangfj/espeak-ng/archive/7251208ee427ef87e94f39d0e99b15d287224ed6.zip"
+		DOWNLOAD_EXTRACT_TIMESTAMP TRUE
         CMAKE_ARGS -DCMAKE_INSTALL_PREFIX:PATH=${CMAKE_INSTALL_PREFIX}
         CMAKE_ARGS -DUSE_ASYNC:BOOL=OFF
         CMAKE_ARGS -DBUILD_SHARED_LIBS:BOOL=${BUILD_SHARED_LIBS}

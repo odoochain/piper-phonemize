@@ -10,7 +10,7 @@ _LIB_DIR = _DIR / "_install/lib"
 _INCLUDE_DIR = _DIR / '_install/include'
 
 
-__version__ = "1.2.0"
+__version__ = "1.1.0"
 
 ext_modules = [
     Pybind11Extension(
