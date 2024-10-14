@@ -30,9 +30,11 @@ delocate-wheel -w fixed_wheels -v ./dist/piper_phonemize*.whl
 _On Windows_
 
 ```console
-Copy-Item -Recurse ./_install/share/espeak-ng-data ./piper_phonemize/
+Copy-Item -Recurse ./share/espeak-ng-data ./piper_phonemize/
 $env:INCLUDE += ";$pwd/_install/include"
 $env:LIB += ";$pwd/_install/lib"
+$env:INCLUDE += ";D:\tools\piper-phonemize\include"
+
 Copy-Item _install\bin\espeak-ng.dll piper_phonemize\
 Copy-Item _install\lib\onnxruntime.dll piper_phonemize\
 python -m build -w
