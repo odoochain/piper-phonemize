@@ -35,8 +35,8 @@ $env:INCLUDE += ";$pwd/_install/include"
 $env:LIB += ";$pwd/_install/lib"
 $env:INCLUDE += ";D:\tools\piper-phonemize\include"
 
-Copy-Item _install\bin\espeak-ng.dll piper_phonemize\
-Copy-Item _install\lib\onnxruntime.dll piper_phonemize\
+Copy-Item bin\espeak-ng.dll piper_phonemize\
+Copy-Item lib\onnxruntime.dll piper_phonemize\
 python -m build -w
 ```
 
